@@ -1,0 +1,1 @@
+Update table users drop column password;
