@@ -1,0 +1,32 @@
+name: Ensure Changes Exist In UAT
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  check-uat:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Fetch all branches
+        run: git fetch origin
+
+      - name: Check if commits exist in UAT
+        run: |
+          git checkout origin/uat
+          echo "Checking if PR commits exist in UAT branch..."
+          if git merge-base --is-ancestor ${{ github.event.pull_request.head.sha }} origin/uat
+          then
+            echo "Changes exist in UAT"
+          else
+            echo "Changes NOT found in UAT"
+            echo "Please merge this branch into uat first before merging into main."
+            exit 1
+          fi

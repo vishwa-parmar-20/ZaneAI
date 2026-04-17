@@ -1,0 +1,17 @@
+name: Deploy to Production
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Trigger Render Production Deploy
+        run: |
+          echo "Starting production deployment..."
+          curl -X POST ${{ secrets.RENDER_PROD_DEPLOY_HOOK }}
+          echo "Deployment request sent to Render"

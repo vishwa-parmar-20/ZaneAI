@@ -1,0 +1,16 @@
+name: Deploy to UAT
+
+on:
+  push:
+    branches:
+      - uat
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Render UAT Deploy
+        run: |
+          echo "Starting uat deployment..."
+          curl -X POST ${{ secrets.RENDER_UAT_DEPLOY_HOOK }}
+          echo "Deployment request sent to Render"
